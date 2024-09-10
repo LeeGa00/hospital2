@@ -85,7 +85,7 @@
     <!-- Render the Beds -->
     <v-row>
       <v-col
-        v-for="(bed, index) in values"
+        v-for="(bed) in values"
         :key="bed.hpid"
         cols="12"
         md="4"
