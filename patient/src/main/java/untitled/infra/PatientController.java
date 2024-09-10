@@ -27,6 +27,7 @@ public class PatientController {
     )
     public Patient patientUpdate(
         @PathVariable(value = "id") Long id,
+        @RequestBody Patient updatedPatient,
         HttpServletRequest request,
         HttpServletResponse response
     ) throws Exception {
@@ -35,14 +36,18 @@ public class PatientController {
 
         optionalPatient.orElseThrow(() -> new Exception("No Entity Found"));
         Patient patient = optionalPatient.get();
-        patient.patientUpdate();
+        patient.setPatientName(updatedPatient.getPatientName());
+        patient.setPatientDisease(updatedPatient.getPatientDisease());
+        patient.setPatientNumber(updatedPatient.getPatientNumber());
+        patient.setStatus(updatedPatient.getStatus());
 
+        patient.patientUpdate();
         patientRepository.save(patient);
         return patient;
     }
 
     @RequestMapping(
-        value = "/patients/{id}//patientdelete",
+        value = "/patients/{id}/patientdelete",
         method = RequestMethod.PUT,
         produces = "application/json;charset=UTF-8"
     )

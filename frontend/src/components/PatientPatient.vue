@@ -213,6 +213,7 @@
             async patientUpdate() {
                 try {
                     if(!this.offline) {
+                        console.log("테스트 중" + this.value._links['patientupdate'])
                         var temp = await axios.put(axios.fixUrl(this.value._links['patientupdate'].href))
                         for(var k in temp.data) {
                             this.value[k]=temp.data[k];

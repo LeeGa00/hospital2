@@ -5,12 +5,14 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import untitled.PatientApplication;
 import untitled.domain.PatientRegistered;
 
 @Entity
 @Table(name = "Patient_table")
 @Data
+@ToString
 //<<< DDD / Aggregate Root
 public class Patient {
 
@@ -47,8 +49,6 @@ public class Patient {
 
     //<<< Clean Arch / Port Method
     public void patientUpdate() {
-        //implement business logic here:
-
         PatientModified patientModified = new PatientModified(this);
         patientModified.publishAfterCommit();
     }
