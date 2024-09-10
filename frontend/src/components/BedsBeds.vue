@@ -196,7 +196,7 @@
             change(){
                 this.$emit('input', this.value);
             },
-            async () {
+            async updateData() {
                 try {
                     if(!this.offline) {
                         var temp = await axios.put(axios.fixUrl(this.value._links[''].href))
