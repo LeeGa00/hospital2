@@ -1,5 +1,6 @@
 package untitled.infra;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +22,7 @@ public class HospitalController {
     HospitalRepository hospitalRepository;
 
     @RequestMapping(
-        value = "/hospitals/{id}//approve",
+        value = "/hospitals/{id}/approve",
         method = RequestMethod.PUT,
         produces = "application/json;charset=UTF-8"
     )
@@ -37,12 +38,14 @@ public class HospitalController {
         Hospital hospital = optionalHospital.get();
         hospital.approve();
 
+        hospital.setStatus("승인");
+        hospital.setStartDate(LocalDateTime.now());
         hospitalRepository.save(hospital);
         return hospital;
     }
 
     @RequestMapping(
-        value = "/hospitals/{id}//reject",
+        value = "/hospitals/{id}/reject",
         method = RequestMethod.PUT,
         produces = "application/json;charset=UTF-8"
     )
@@ -58,6 +61,31 @@ public class HospitalController {
         Hospital hospital = optionalHospital.get();
         hospital.reject();
 
+        hospital.setStatus("거절");
+        hospitalRepository.save(hospital);
+        return hospital;
+    }
+
+    @RequestMapping(
+        value = "/hospitals/{id}/discharge",
+        method = RequestMethod.PUT,
+        produces = "application/json;charset=UTF-8"
+    )
+    public Hospital discharge(
+        @PathVariable(value = "id") Long id,
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws Exception {
+        System.out.println("##### /hospital/discharge  called #####");
+        Optional<Hospital> optionalHospital = hospitalRepository.findById(id);
+
+        optionalHospital.orElseThrow(() -> new Exception("No Entity Found"));
+        Hospital hospital = optionalHospital.get();
+        hospital.discharge();
+
+        hospital.setStatus("퇴원");
+        // 이벤트 리스너 동작 중 (테스트)
+        // hospital.setStartDate(LocalDateTime.now());
         hospitalRepository.save(hospital);
         return hospital;
     }

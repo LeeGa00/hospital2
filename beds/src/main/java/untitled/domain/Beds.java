@@ -141,7 +141,8 @@ public class Beds  {
                     bedsDto.setHospitalName(getTagValue(itemListElement, "dutyName"));
                     bedsDto.setHpid(getTagValue(itemListElement, "hpid"));
                     // 임시로 일반 병상 가용 정보를 가져옴
-                    bedsDto.setRemain(Integer.parseInt(getTagValue(itemListElement, "hvec")));
+                    int tempRemain = Integer.parseInt(getTagValue(itemListElement, "hvec"));
+                    if (tempRemain <= 0) { bedsDto.setRemain(0); } else{ bedsDto.setRemain(0); }
                     bedsDto = getHospitalLocationByhpid(bedsDto);
                     
                     System.out.println(bedsDto);
@@ -238,51 +239,32 @@ public class Beds  {
 //<<< Clean Arch / Port Method
     public static void bedsUpdate(HospitalizationApproved hospitalizationApproved){
         
-        //implement business logic here:
-
-        /** Example 1:  new item 
-        Beds beds = new Beds();
-        repository().save(beds);
-
-        */
-
-        /** Example 2:  finding and process
-        
-        repository().findById(hospitalizationApproved.get???()).ifPresent(beds->{
+        repository().findById(hospitalizationApproved.getBedsId()).ifPresent(beds->{
             
-            beds // do something
-            repository().save(beds);
+            if (beds.getRemain() > 0) {
+                beds.setRemain(beds.getRemain()-1);
+                repository().save(beds);
+            } else {
+                // 보상 트랜젝션을 구현해야할지 모르겠다.
+                System.out.println("남은 자리가 없습니다.");
+            }
 
-
-         });
-        */
-
-        
+         });   
     }
 //>>> Clean Arch / Port Method
 //<<< Clean Arch / Port Method
     public static void bedsUpdate(Discharged discharged){
         
-        //implement business logic here:
-
-        /** Example 1:  new item 
-        Beds beds = new Beds();
-        repository().save(beds);
-
-        */
-
-        /** Example 2:  finding and process
-        
-        repository().findById(discharged.get???()).ifPresent(beds->{
+        repository().findById(discharged.getBedsId()).ifPresent(beds->{
             
-            beds // do something
-            repository().save(beds);
-
-
+            if (beds.getRemain()+1 <= beds.getTotalBeds()){
+                beds.setRemain(beds.getRemain()+1);
+                repository().save(beds);
+            } else {
+                System.out.println("잘못된 데이터: 전체 병상보다 가용병상이 많을 수 없음.");
+            }
          });
-        */
 
-        
     }
 //>>> Clean Arch / Port Method
 
