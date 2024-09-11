@@ -56,8 +56,6 @@ public class Patient {
     //>>> Clean Arch / Port Method
     //<<< Clean Arch / Port Method
     public void patientDelete() {
-        //implement business logic here:
-
         PatientDeleted patientDeleted = new PatientDeleted(this);
         patientDeleted.publishAfterCommit();
     }

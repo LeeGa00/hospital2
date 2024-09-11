@@ -63,7 +63,9 @@ public class PatientController {
         Patient patient = optionalPatient.get();
         patient.patientDelete();
 
-        patientRepository.save(patient);
+        // 실제로 삭제
+        patientRepository.delete(patient);
+
         return patient;
     }
 }
