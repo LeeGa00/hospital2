@@ -19,8 +19,8 @@ public class PatientHateoasProcessor
         );
         model.add(
             Link
-                .of(model.getRequiredLink("self").getHref() + "//patientdelete")
-                .withRel("/patientdelete")
+                .of(model.getRequiredLink("self").getHref() + "/patientdelete")
+                .withRel("patientdelete")
         );
 
         return model;
