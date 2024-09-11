@@ -141,7 +141,8 @@ public class Beds  {
                     bedsDto.setHospitalName(getTagValue(itemListElement, "dutyName"));
                     bedsDto.setHpid(getTagValue(itemListElement, "hpid"));
                     // 임시로 일반 병상 가용 정보를 가져옴
-                    bedsDto.setRemain(Integer.parseInt(getTagValue(itemListElement, "hvec")));
+                    int tempRemain = Integer.parseInt(getTagValue(itemListElement, "hvec"));
+                    if (tempRemain <= 0) { bedsDto.setRemain(0); } else{ bedsDto.setRemain(0); }
                     bedsDto = getHospitalLocationByhpid(bedsDto);
                     
                     System.out.println(bedsDto);

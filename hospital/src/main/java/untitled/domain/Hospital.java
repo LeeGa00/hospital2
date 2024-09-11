@@ -1,7 +1,7 @@
 package untitled.domain;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.*;
 import lombok.Data;
@@ -23,9 +23,9 @@ public class Hospital {
 
     private Long bedsId;
 
-    private Date startDate;
+    private LocalDateTime startDate;
 
-    private Date endDate;
+    private LocalDateTime endDate;
 
     private Long patientId;
 
@@ -68,7 +68,7 @@ public class Hospital {
         hospital.setBedsId(hospitalizationReserved.getBedsId());
         hospital.setPatientId(hospitalizationReserved.getPatientId());
         hospital.setHospitalizationId(hospitalizationReserved.getId());
-        hospital.setStatus("승인대기중");
+        hospital.setStatus("요청 받음");
         repository().save(hospital);
     }
     //>>> Clean Arch / Port Method
@@ -81,21 +81,26 @@ public class Hospital {
         repository().findById(Long.valueOf(hospitalizationCancelled.getBedsId())).ifPresent(hospital->{
             
             if (!hospital.getStatus().equals("승인")){
-                hospital.setStatus("예약취소됨"); // do something
+                hospital.setStatus("예약취소됨");
                 repository().save(hospital);
             } else {
-                // 이벤트를 발행해야하는지 궁금
+                // 이벤트를 발행해야하는지 -> hospitalization과 hospital 상태 2개를 취소로 변경만 함
                 System.out.println(
                     "\n\n##### 예약취소 불가능함 : " +
                     "hospital.java - updateStatus 에서 예외처리" +
                     "\n\n"
                 );
             }
-
          });
 
     }
-    //>>> Clean Arch / Port Method
+
+    public static void updateEnddate(Discharged discharged) {
+        repository().findById(Long.valueOf(discharged.getId())).ifPresent(hospital->{
+            hospital.setEndDate(LocalDateTime.now());
+        });
+    }
+
 
 }
 //>>> DDD / Aggregate Root

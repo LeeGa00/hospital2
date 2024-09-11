@@ -1,5 +1,6 @@
 package untitled.infra;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,6 +39,7 @@ public class HospitalController {
         hospital.approve();
 
         hospital.setStatus("승인");
+        hospital.setStartDate(LocalDateTime.now());
         hospitalRepository.save(hospital);
         return hospital;
     }
@@ -82,6 +84,8 @@ public class HospitalController {
         hospital.discharge();
 
         hospital.setStatus("퇴원");
+        // 이벤트 리스너 동작 중 (테스트)
+        // hospital.setStartDate(LocalDateTime.now());
         hospitalRepository.save(hospital);
         return hospital;
     }

@@ -25,8 +25,8 @@ public class Hospitalization {
     private String status;
 
     @PrePersist
-    public void onPostPersist() {
-        //status 설정 추가
+    public void onPrePersist() {
+        this.setStatus("병원승인 대기");
         HospitalizationReserved hospitalizationReserved = new HospitalizationReserved(this);
         hospitalizationReserved.publishAfterCommit();
     }

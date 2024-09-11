@@ -36,7 +36,6 @@ public class PolicyHandler {
             "\n\n"
         );
 
-        // Sample Logic //
         Hospital.createHospitalInfo(event);
     }
 
@@ -56,6 +55,23 @@ public class PolicyHandler {
 
         // Sample Logic //
         Hospital.updateStatus(event);
+    }
+
+    @StreamListener(
+        value = KafkaProcessor.INPUT,
+        condition = "headers['type']=='Discharged'"
+    )
+    public void wheneverDischarged_UpdateEnddate(
+        @Payload Discharged discharged
+    ) {
+        Discharged event = discharged;
+        System.out.println(
+            "\n\n##### listener UpdateStatus : " +
+            discharged +
+            "\n\n"
+        );
+
+        Hospital.updateEnddate(event);
     }
 }
 //>>> Clean Arch / Inbound Adaptor
