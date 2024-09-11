@@ -9,6 +9,7 @@ import untitled.HospitalApplication;
 import untitled.domain.Discharged;
 import untitled.domain.HospitalizationApproved;
 import untitled.domain.HospitalizationRejected;
+import untitled.domain.HospitalizationCancelled;
 
 @Entity
 @Table(name = "Hospital_table")
@@ -34,18 +35,7 @@ public class Hospital {
 
     @PostPersist
     public void onPostPersist() {
-        HospitalizationApproved hospitalizationApproved = new HospitalizationApproved(
-            this
-        );
-        hospitalizationApproved.publishAfterCommit();
 
-        HospitalizationRejected hospitalizationRejected = new HospitalizationRejected(
-            this
-        );
-        hospitalizationRejected.publishAfterCommit();
-
-        Discharged discharged = new Discharged(this);
-        discharged.publishAfterCommit();
     }
 
     public static HospitalRepository repository() {
@@ -55,43 +45,54 @@ public class Hospital {
         return hospitalRepository;
     }
 
-    //<<< Clean Arch / Port Method
     public void approve() {
-        //implement business logic here:
-
+        HospitalizationApproved hospitalizationApproved = new HospitalizationApproved(this);
+        hospitalizationApproved.publishAfterCommit();
     }
 
-    //>>> Clean Arch / Port Method
-    //<<< Clean Arch / Port Method
     public void reject() {
-        //implement business logic here:
-
+        HospitalizationRejected hospitalizationRejected = new HospitalizationRejected(this);
+        hospitalizationRejected.publishAfterCommit();
     }
 
-    //>>> Clean Arch / Port Method
+    public void discharge() {
+        Discharged discharged = new Discharged(this);
+        discharged.publishAfterCommit();
+    }
 
     //<<< Clean Arch / Port Method
     public static void createHospitalInfo(
         HospitalizationReserved hospitalizationReserved
     ) {
-        //implement business logic here:
-
-        /** Example 1:  new item 
         Hospital hospital = new Hospital();
+        hospital.setBedsId(hospitalizationReserved.getBedsId());
+        hospital.setPatientId(hospitalizationReserved.getPatientId());
+        hospital.setHospitalizationId(hospitalizationReserved.getId());
+        hospital.setStatus("승인대기중");
         repository().save(hospital);
+    }
+    //>>> Clean Arch / Port Method
 
-        */
-
-        /** Example 2:  finding and process
-        
-        repository().findById(hospitalizationReserved.get???()).ifPresent(hospital->{
+    //>>> Clean Arch / Port Method
+    //<<< Clean Arch / Port Method
+    public static void updateStatus(
+        HospitalizationCancelled hospitalizationCancelled
+    ) {
+        repository().findById(Long.valueOf(hospitalizationCancelled.getBedsId())).ifPresent(hospital->{
             
-            hospital // do something
-            repository().save(hospital);
-
+            if (!hospital.getStatus().equals("승인")){
+                hospital.setStatus("예약취소됨"); // do something
+                repository().save(hospital);
+            } else {
+                // 이벤트를 발행해야하는지 궁금
+                System.out.println(
+                    "\n\n##### 예약취소 불가능함 : " +
+                    "hospital.java - updateStatus 에서 예외처리" +
+                    "\n\n"
+                );
+            }
 
          });
-        */
 
     }
     //>>> Clean Arch / Port Method

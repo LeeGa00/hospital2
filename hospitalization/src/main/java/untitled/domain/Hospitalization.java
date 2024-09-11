@@ -24,11 +24,10 @@ public class Hospitalization {
 
     private String status;
 
-    @PostPersist
+    @PrePersist
     public void onPostPersist() {
-        HospitalizationReserved hospitalizationReserved = new HospitalizationReserved(
-            this
-        );
+        //status 설정 추가
+        HospitalizationReserved hospitalizationReserved = new HospitalizationReserved(this);
         hospitalizationReserved.publishAfterCommit();
     }
 
@@ -41,11 +40,7 @@ public class Hospitalization {
 
     //<<< Clean Arch / Port Method
     public void hospitalizationCancel() {
-        //implement business logic here:
-
-        HospitalizationCanceled hospitalizationCanceled = new HospitalizationCanceled(
-            this
-        );
+        HospitalizationCancelled hospitalizationCanceled = new HospitalizationCancelled(this);
         hospitalizationCanceled.publishAfterCommit();
     }
 
@@ -55,24 +50,11 @@ public class Hospitalization {
     public static void updateStatus(
         HospitalizationApproved hospitalizationApproved
     ) {
-        //implement business logic here:
-
-        /** Example 1:  new item 
-        Hospitalization hospitalization = new Hospitalization();
-        repository().save(hospitalization);
-
-        */
-
-        /** Example 2:  finding and process
         
-        repository().findById(hospitalizationApproved.get???()).ifPresent(hospitalization->{
-            
-            hospitalization // do something
+        repository().findById(hospitalizationApproved.getHospitalizationId()).ifPresent(hospitalization->{
+            hospitalization.setStatus("이송시작"); // do something
             repository().save(hospitalization);
-
-
          });
-        */
 
     }
 
@@ -81,24 +63,10 @@ public class Hospitalization {
     public static void updateStatus(
         HospitalizationRejected hospitalizationRejected
     ) {
-        //implement business logic here:
-
-        /** Example 1:  new item 
-        Hospitalization hospitalization = new Hospitalization();
-        repository().save(hospitalization);
-
-        */
-
-        /** Example 2:  finding and process
-        
-        repository().findById(hospitalizationRejected.get???()).ifPresent(hospitalization->{
-            
-            hospitalization // do something
+        repository().findById(hospitalizationRejected.getHospitalizationId()).ifPresent(hospitalization->{
+            hospitalization.setStatus("요청거절"); // do something
             repository().save(hospitalization);
-
-
          });
-        */
 
     }
     //>>> Clean Arch / Port Method

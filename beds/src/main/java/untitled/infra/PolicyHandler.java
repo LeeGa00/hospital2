@@ -37,7 +37,6 @@ public class PolicyHandler {
             "\n\n"
         );
 
-        // Sample Logic //
         Beds.bedsUpdate(event);
     }
 
@@ -51,7 +50,6 @@ public class PolicyHandler {
             "\n\n##### listener BedsUpdate : " + discharged + "\n\n"
         );
 
-        // Sample Logic //
         Beds.bedsUpdate(event);
     }
 }

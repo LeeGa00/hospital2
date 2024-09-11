@@ -18,9 +18,9 @@ public class HospitalizationHateoasProcessor
             Link
                 .of(
                     model.getRequiredLink("self").getHref() +
-                    "//hospitalizationcancel"
+                    "/hospitalizationcancel"
                 )
-                .withRel("/hospitalizationcancel")
+                .withRel("hospitalizationcancel")
         );
 
         return model;

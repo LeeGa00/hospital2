@@ -14,13 +14,13 @@ public class HospitalHateoasProcessor
     public EntityModel<Hospital> process(EntityModel<Hospital> model) {
         model.add(
             Link
-                .of(model.getRequiredLink("self").getHref() + "//approve")
-                .withRel("/approve")
+                .of(model.getRequiredLink("self").getHref() + "/approve")
+                .withRel("approve")
         );
         model.add(
             Link
-                .of(model.getRequiredLink("self").getHref() + "//reject")
-                .withRel("/reject")
+                .of(model.getRequiredLink("self").getHref() + "/reject")
+                .withRel("reject")
         );
 
         return model;

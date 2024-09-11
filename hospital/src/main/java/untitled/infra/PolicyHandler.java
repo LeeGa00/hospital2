@@ -3,7 +3,6 @@ package untitled.infra;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.naming.NameParser;
-import javax.naming.NameParser;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
@@ -39,6 +38,24 @@ public class PolicyHandler {
 
         // Sample Logic //
         Hospital.createHospitalInfo(event);
+    }
+
+    @StreamListener(
+        value = KafkaProcessor.INPUT,
+        condition = "headers['type']=='HospitalizationCancelled'"
+    )
+    public void wheneverHospitalizationCanceled_UpdateStatus(
+        @Payload HospitalizationCancelled hospitalizationCancelled
+    ) {
+        HospitalizationCancelled event = hospitalizationCancelled;
+        System.out.println(
+            "\n\n##### listener UpdateStatus : " +
+            hospitalizationCancelled +
+            "\n\n"
+        );
+
+        // Sample Logic //
+        Hospital.updateStatus(event);
     }
 }
 //>>> Clean Arch / Inbound Adaptor

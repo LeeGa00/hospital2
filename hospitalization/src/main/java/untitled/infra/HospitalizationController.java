@@ -21,7 +21,7 @@ public class HospitalizationController {
     HospitalizationRepository hospitalizationRepository;
 
     @RequestMapping(
-        value = "/hospitalizations/{id}//hospitalizationcancel",
+        value = "/hospitalizations/{id}/hospitalizationcancel",
         method = RequestMethod.PUT,
         produces = "application/json;charset=UTF-8"
     )
@@ -43,6 +43,7 @@ public class HospitalizationController {
         Hospitalization hospitalization = optionalHospitalization.get();
         hospitalization.hospitalizationCancel();
 
+        hospitalization.setStatus("취소됨");
         hospitalizationRepository.save(hospitalization);
         return hospitalization;
     }

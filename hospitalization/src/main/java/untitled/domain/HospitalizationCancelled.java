@@ -9,18 +9,18 @@ import untitled.infra.AbstractEvent;
 //<<< DDD / Domain Event
 @Data
 @ToString
-public class HospitalizationCanceled extends AbstractEvent {
+public class HospitalizationCancelled extends AbstractEvent {
 
     private Long id;
     private Long patientId;
     private String status;
     private Long bedsId;
 
-    public HospitalizationCanceled(Hospitalization aggregate) {
+    public HospitalizationCancelled(Hospitalization aggregate) {
         super(aggregate);
     }
 
-    public HospitalizationCanceled() {
+    public HospitalizationCancelled() {
         super();
     }
 }
